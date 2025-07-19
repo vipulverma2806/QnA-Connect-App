@@ -1,17 +1,63 @@
-const mongoose = require('mongoose')
-const express = require('express')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const cors = require('cors')
+const mongoose = require("mongoose");
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
+const User = require("./DBModel.js");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
-app.use(express.json())
-app.use(cors())
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+    credentials: true,
+  })
+);
 
+//-------------DB connection--------------------
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("connected to DB"))
+  .catch((err) => {
+    console.log(err);
+  });
 
+//-------------register--------------------
+app.post("/register", async (req, res) => {
+  console.log(req.body);
+  const { name, email, password } = req.body;
+  try {
+    const hashed = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashed });
+    res.json("okkkkkkkkk");
+  } catch (err) {
+    console.log(err);
+  }
+});
 
+//------------------Login----------------------
 
-app.post('/register',async(req,res)=>{
-    res.json("ok")
-})
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log(email);
 
-app.listen('4000',()=> console.log("server running on port 4000"))
+  try {
+    const found = await User.findOne({ email });
+
+    if (!found) return res.status(401).json("NA");
+    const compared = await bcrypt.compare(password, found.password);
+
+    if (!compared) return res.status(401).json("NAa");
+    const token = jwt.sign({ email: found.email }, "SECRET_KEY", {
+      expiresIn: "1d",
+    });
+
+    res.cookie("token", token);
+    res.status(202).json("Login success");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.listen("4000", () => console.log("server running on port 4000"));
