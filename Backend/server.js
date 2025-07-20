@@ -3,19 +3,22 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const User = require("./DBModel.js");
+const { User, Question, Answer } = require("./DBModel.js");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: `${process.env.ORIGIN}`,
     credentials: true,
   })
 );
 
-//-------------DB connection--------------------
+//-------------DB connection-------------------
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("connected to DB"))
@@ -59,5 +62,22 @@ app.post("/login", async (req, res) => {
     console.log(err);
   }
 });
+
+//----------------------logout-------------------
+app.post("/logout", async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json("Logout success");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//--------------------Post Question------------
+app.post("/postQue",async(req,res)=>{
+  try{
+
+  }catch(err){}
+})
 
 app.listen("4000", () => console.log("server running on port 4000"));

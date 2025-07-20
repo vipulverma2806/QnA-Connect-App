@@ -2,12 +2,17 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const Login = () => {
   axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+
+  //------------------Login-------------------
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -17,6 +22,8 @@ const Login = () => {
         email: "",
         password: "",
       });
+      toast.success("Login successful.");
+      if (res.status === 202) return navigate("/PDash");
     } catch (err) {
       console.log(err.response.data);
     }
@@ -32,15 +39,15 @@ const Login = () => {
         <input
           type="email"
           placeholder="Email"
-          className="placeholder-gray-400 w-full p-3 rounded-2xl  bg-gray-700"
+          className="placeholder-gray-400 w-full text-gray-200 p-3 rounded-2xl  bg-gray-700"
           value={login.email}
-          onChange={(e) => setLogin({ ...login, email: e.target.value })}
+          onChange={(e) => setLogin({ ...login, email: e.target.value.trim() })}
           required
         />
         <input
           type="password"
           placeholder="Password"
-          className="placeholder-gray-400 w-full p-3 rounded-2xl  bg-gray-700"
+          className="placeholder-gray-400 text-gray-200  w-full p-3 rounded-2xl  bg-gray-700"
           value={login.password}
           onChange={(e) => setLogin({ ...login, password: e.target.value })}
           required
