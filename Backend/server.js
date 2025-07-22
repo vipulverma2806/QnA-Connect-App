@@ -43,7 +43,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
+  // console.log(email);
 
   try {
     const found = await User.findOne({ email });
@@ -52,7 +52,7 @@ app.post("/login", async (req, res) => {
     const compared = await bcrypt.compare(password, found.password);
 
     if (!compared) return res.status(401).json("NAa");
-    const token = jwt.sign({ email: found.email }, "SECRET_KEY", {
+    const token = jwt.sign({ email: found.email,id:found._id }, "SECRET_KEY", {
       expiresIn: "1d",
     });
 
@@ -73,11 +73,24 @@ app.post("/logout", async (req, res) => {
   }
 });
 
-//--------------------Post Question------------
-app.post("/postQue",async(req,res)=>{
-  try{
+//--------------------Post Question-----------
+app.post("/postQue", async (req, res) => {
+  const{question,description} = req.body
+  const token = req.cookies.token;
+const verified = jwt.verify(token,"SECRET_KEY")
 
-  }catch(err){}
-})
+  try {
+    const data = await Question.create({question,description,userId:verified.id})
+    console.log(data)
+  } catch (err) {
+    console.log(err)
+  }
+});
+
+//-------------checkAuth-----------
+app.get("/checkAuth", async (req, res) => {
+  if (req.cookies.token) return res.status(202);
+  res.status(403);
+});
 
 app.listen("4000", () => console.log("server running on port 4000"));

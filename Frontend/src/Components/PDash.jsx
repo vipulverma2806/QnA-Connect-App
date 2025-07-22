@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 const PDash = () => {
-  const BASE = import.meta.env.VITE_URL
+  const BASE = import.meta.env.VITE_URL;
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -17,21 +17,21 @@ const PDash = () => {
     try {
       const res = await axios.post(`${BASE}/logout`);
       console.log(res);
-      navigate("/")
+      navigate("/");
       toast.info("Logout successful.");
     } catch (err) {
       console.log(err);
     }
   };
   //-------------------post Question-----------
-  const postQue = async()=>{
-    try{
-      const res = await axios.post(`${BASE}/postQue`,form)
-      console.log(res)
-    }catch(err){
-      console.log(err)
+  const postQue = async () => {
+    try {
+      const res = await axios.post(`${BASE}/postQue`, form);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   const questionArray = [
     {
@@ -71,16 +71,14 @@ const PDash = () => {
           Logout
         </button>
       </nav>
-      <div className="bg-gray-800 rounded-2xl p-5 gap-y-5 grid">
+      <form onSubmit={postQue} className="bg-gray-800 rounded-2xl p-5 gap-y-5 grid">
         <div className="w-full rounded  bg-gray-700">
           <input
             type="text"
             placeholder="Ask your Question here"
             value={form.question}
             className="w-full p-3 text-xl  placeholder-gray-400 "
-            onChange={() => {
-              (e) => setForm({ ...form, question: e.target.value });
-            }}
+            onChange={(e) => setForm({ ...form, question: e.target.value })}
             required
           />
         </div>
@@ -90,18 +88,16 @@ const PDash = () => {
             placeholder="Description"
             value={form.description}
             className="w-full p-3 text-xl  placeholder-gray-400 "
-            onChange={() => {
-              (e) => setForm({ ...form, description: e.target.value });
-            }}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
             required
           />
         </div>
         <div>
-          <button className="bg-blue-600 rounded text-xl text-gray-200 w-36  hover:bg-blue-800 px-3 py-1 m-1 hover:cursor-pointer">
+          <button className="bg-blue-600 rounded text-xl text-gray-200 w-36  hover:bg-blue-800 px-3 py-1 m-1 hover:cursor-pointer" type="submit">
             Submit
           </button>
         </div>
-      </div>
+      </form>
       {questionArray.map((que, i) => {
         return (
           <div className="bg-gray-800 mt-5 rounded-2xl text-gray-200 p-5 gap-y-3 grid">
