@@ -52,9 +52,13 @@ app.post("/login", async (req, res) => {
     const compared = await bcrypt.compare(password, found.password);
 
     if (!compared) return res.status(401).json("NAa");
-    const token = jwt.sign({ email: found.email,id:found._id }, "SECRET_KEY", {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { email: found.email, id: found._id },
+      "SECRET_KEY",
+      {
+        expiresIn: "1d",
+      }
+    );
 
     res.cookie("token", token);
     res.status(202).json("Login success");
@@ -75,18 +79,72 @@ app.post("/logout", async (req, res) => {
 
 //--------------------Post Question-----------
 app.post("/postQue", async (req, res) => {
-  const{question,description} = req.body
+  const { question, description } = req.body;
   const token = req.cookies.token;
-const verified = jwt.verify(token,"SECRET_KEY")
+  const verified = jwt.verify(token, "SECRET_KEY");
 
   try {
-    const data = await Question.create({question,description,userId:verified.id})
-    console.log(data)
+    const data = await Question.create({
+      question,
+      description,
+      userId: verified.id,
+    });
+    console.log(data);
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 });
 
+//---------------show dashboard question----------
+app.get("/getQue", async (req, res) => {
+  const token = req.cookies.token;
+  const verified = jwt.verify(token, "SECRET_KEY");
+  // console.log(verified);
+  try {
+    const allQues = await Question.find({ userId: verified.id }).sort({
+      updatedAt: -1,
+    });
+    // console.log(allQues);
+    res.status(200).json(allQues);
+  } catch (err) {
+    console.log(err);
+  }
+});
+//-----------------Delete Question----------------
+app.delete("/delete/:id", async (req, res) => {
+  const token = req.cookies.token;
+  const verified = jwt.verify(token, "SECRET_KEY");
+  const id = req.params.id;
+  try {
+    const deleted = await Question.findByIdAndDelete(id);
+
+    res.status(200).json("Deleted");
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+//-----------------Edit Question----------------
+app.put("/edit/:id", async (req, res) => {
+  const token = req.cookies.token;
+  const verified = jwt.verify(token, "SECRET_KEY");
+  const id = req.params.id;
+  const data = req.body;
+  try {
+    const edited = await Question.findOneAndUpdate(
+      {
+        _id: id,
+        userId: verified.id,
+      },
+      { $set: data },
+      { new: true }
+    );
+
+    res.status(200).json("Edited");
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 //-------------checkAuth-----------
 app.get("/checkAuth", async (req, res) => {
   if (req.cookies.token) return res.status(202);
