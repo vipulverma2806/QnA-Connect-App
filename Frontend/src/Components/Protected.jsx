@@ -8,22 +8,26 @@ const Protected = ({ children }) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [auth, setAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     checkAuth();
   }, []);
 
+  //----------checkauth--------
   const checkAuth = async () => {
     try {
       const res = await axios.get(`${BASE}/checkAuth`);
-      console.log("working");
-
-      if (res.data) return setAuth(true);
-      if (!auth) return <Navigate to="/"></Navigate>;
+      console.log(res);
+      setAuth(true);
+      setLoading(false)
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
+      setAuth(false);
+      navigate("/");
     }
   };
-
+  if(loading) return <div>loading</div>
   return children;
 };
 

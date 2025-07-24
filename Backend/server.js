@@ -95,7 +95,28 @@ app.post("/postQue", async (req, res) => {
   }
 });
 
-//---------------show dashboard question----------
+//--------------------Post Answer-----------
+app.post("/postAns/:queId", async (req, res) => {
+  const { answer } = req.body;
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json("Please login to Answer");
+  const queId = req.params.queId;
+  const verified = jwt.verify(token, "SECRET_KEY");
+  console.log(answer);
+  try {
+    const data = await Answer.create({
+      answer,
+      userId: verified.id,
+      queId: queId,
+    });
+    console.log(data);
+    res.status(201).json("ok");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//---------------show Posted question----------
 app.get("/getQue", async (req, res) => {
   const token = req.cookies.token;
   const verified = jwt.verify(token, "SECRET_KEY");
@@ -110,6 +131,32 @@ app.get("/getQue", async (req, res) => {
     console.log(err);
   }
 });
+
+//---------------show Feed question----------
+app.get("/allQue", async (req, res) => {
+  try {
+    const allQues = await Question.find().populate("userId", "name").sort({
+      updatedAt: -1,
+    });
+    res.status(200).json(allQues);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//---------------get Answers----------
+app.get("/allAns", async (req, res) => {
+  try {
+    const allAns = await Answer.find()
+      // .populate("queId")
+      .populate("userId", "name");
+
+    res.status(200).json(allAns);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //-----------------Delete Question----------------
 app.delete("/delete/:id", async (req, res) => {
   const token = req.cookies.token;
@@ -147,8 +194,8 @@ app.put("/edit/:id", async (req, res) => {
 });
 //-------------checkAuth-----------
 app.get("/checkAuth", async (req, res) => {
-  if (req.cookies.token) return res.status(202);
-  res.status(403);
+  if (req.cookies.token) return res.status(202).json("okkkkk");
+  res.status(403).json("forbiddionioen");
 });
 
 app.listen("4000", () => console.log("server running on port 4000"));

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import Protected from "./Components/Protected";
 import NA from './Components/NA'
+import Feed from './Components/Feed'
 const App = () => {
   const [auth, setAuth] = useState(false);
 
@@ -20,6 +21,8 @@ const App = () => {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/PDash" element={<Protected><PDash /></Protected>}></Route>
         <Route path="/NA" element={<NA/>}></Route>
+        <Route path="/feed" element={<Feed/>}></Route>
+        <Route path="/*" element={<Login/>}></Route>
       </Routes>
       <ToastContainer
         position="bottom-center"

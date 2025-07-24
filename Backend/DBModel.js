@@ -40,7 +40,7 @@ const ansSchema = mongoose.Schema({
     ref: "User",
   },
   answer: { type: String },
-});
+},{timestamps:true});
 
 const Answer = mongoose.model("Answer", ansSchema);
 module.exports = { User, Question, Answer };

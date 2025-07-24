@@ -4,10 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import NavBar from "./NavBar";
 const PDash = () => {
   const BASE = import.meta.env.VITE_URL;
   axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     question: "",
     description: "",
@@ -15,22 +16,13 @@ const PDash = () => {
   const [allQue, setAllQue] = useState([]);
   const [editId, setEditId] = useState();
 
-  //---------------logout--------------------
-  const handleLogout = async () => {
-    try {
-      const res = await axios.post(`${BASE}/logout`);
-      console.log(res);
-      navigate("/");
-      toast.info("Logout successful.");
-    } catch (err) {
-      console.log(err);
-    }
-  };
   //-------------------post Question-----------
   const postQue = async () => {
     try {
       const res = await axios.post(`${BASE}/postQue`, form);
+
       console.log(res);
+      toast.success("Answer posted");
       getQue();
     } catch (err) {
       console.log(err);
@@ -77,7 +69,7 @@ const PDash = () => {
         question: "",
         description: "",
       });
-      setEditId()
+      setEditId();
     } catch (err) {
       console.log(err.message);
     }
@@ -85,21 +77,8 @@ const PDash = () => {
 
   return (
     <div className="min-h-screen h-full bg-gray-900 pt-25 pb-10 px-10">
-      <nav className="fixed top-0 left-0 shadow z-50 bg-gray-900 p-7 flex justify-between w-full ">
-        <h1 className="text-4xl  text-gray-300 font-bold">QnA Connect</h1>
-        <Link
-          to="/feed"
-          className="text-gray-300 text-2xl hover:text-blue-500 hover:underline"
-        >
-          Explore Questions
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="text-2xl bg-red-600 rounded-md w-30 text-gray-100 pb-1 font-semibold hover:bg-red-800 hover:cursor-pointer"
-        >
-          Logout
-        </button>
-      </nav>
+      <NavBar centerLink={`/feed`}></NavBar>
+
       <form
         onSubmit={editId ? handleEdit : postQue}
         className="bg-gray-800 rounded-2xl p-5 gap-y-5 grid"
