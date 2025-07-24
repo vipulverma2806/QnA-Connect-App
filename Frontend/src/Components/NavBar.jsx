@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 const NavBar = ({centerLink}) => {
   const BASE = import.meta.env.VITE_URL;
   axios.defaults.withCredentials = true;

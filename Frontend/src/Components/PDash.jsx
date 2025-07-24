@@ -17,13 +17,18 @@ const PDash = () => {
   const [editId, setEditId] = useState();
 
   //-------------------post Question-----------
-  const postQue = async () => {
+  const postQue = async (e) => {
+    e.preventDefault();
     try {
       const res = await axios.post(`${BASE}/postQue`, form);
 
       console.log(res);
-      toast.success("Answer posted");
       getQue();
+      toast.success("Question added Successfully.");
+      setForm({
+        question: "",
+        description: "",
+      });
     } catch (err) {
       console.log(err);
     }

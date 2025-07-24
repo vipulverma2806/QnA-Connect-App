@@ -90,6 +90,7 @@ app.post("/postQue", async (req, res) => {
       userId: verified.id,
     });
     console.log(data);
+    res.status(201).json("question Added");
   } catch (err) {
     console.log(err);
   }

@@ -97,8 +97,8 @@ const Feed = () => {
                       return (
                         <div className="bg-gray-700 rounded-xl p-4 m-4">
                           <h2 className="mb-3">{ans.answer}</h2>
-                          <p>
-                            <span>Posted by- {ans.userId?.name}</span> at{" "}
+                          <p className="bg-gray-500 w-max rounded-3xl px-2">
+                            <span >Posted by- {ans.userId?.name}</span> at{" "}
                             {new Date(ans.updatedAt).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",

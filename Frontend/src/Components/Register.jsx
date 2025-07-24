@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const ENV = import.meta.env;
 const Register = () => {
   const [form, setForm] = useState({
@@ -9,21 +11,20 @@ const Register = () => {
     email: "",
     password: "",
   });
-
+const navigate = useNavigate();
   const handleRegister = async (e) => {
     e.preventDefault();
-    try{
-    const response = await axios.post(`${ENV.VITE_URL}register`, form);
-    console.log(response.data);
-    setForm({
-      name: "",
-      email: "",
-      password: "",
-    });
-    }catch(err){
-
-    }
-    
+    try {
+      const response = await axios.post(`${ENV.VITE_URL}/register`, form);
+      console.log(response.data);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
+      toast.success("Registration Successful.");
+      navigate("/")
+    } catch (err) {}
   };
   return (
     <div className="min-h-screen bg-gray-900 flex justify-center items-center">
@@ -60,7 +61,7 @@ const Register = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 rounded-2xl p-3 text-white w-full"
+          className="bg-blue-500 rounded-2xl p-3 hover:bg-blue-700 hover:cursor-pointer text-white w-full"
         >
           Submit
         </button>
