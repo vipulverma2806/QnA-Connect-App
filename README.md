@@ -46,8 +46,8 @@
 ### User Login
 ![Login](./Frontend/public/screenshots/Login.png)
 ### User personal dashboard
-![Admin Dashboard](./Frontend/public/screenshots/Dashboard.png)
+![Admin Dashboard](./Frontend/public/screenshots/PDash.png)
 ### Common dashboard
-![Admin Dashboard](./Frontend/public/screenshots/Dashboard.png)
+![Admin Dashboard](./Frontend/public/screenshots/feed.png)
 
 
