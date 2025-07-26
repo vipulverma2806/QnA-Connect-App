@@ -16,7 +16,7 @@ const Feed = () => {
     try {
       const allQue = await axios.get(`${BASE}/allQue`);
       setFeedQues(allQue.data);
-    //   console.log(allQue);
+      //   console.log(allQue);
     } catch (err) {
       console.log(err);
     }
@@ -26,7 +26,7 @@ const Feed = () => {
     try {
       const allAns = await axios.get(`${BASE}/allAns`);
       setFeedAns(allAns.data);
-    //   console.log(allAns);
+      //   console.log(allAns);
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +51,7 @@ const Feed = () => {
     } catch (err) {
       console.log(err);
       toast.error(`${err.response.data}`);
-       setAnswer("");
+      setAnswer("");
     }
   };
   return (
@@ -77,15 +77,17 @@ const Feed = () => {
                       Q. {que.question}
                     </h1>
                     <h2 className="text-gray-400 text-xl pl-5">
-                         -{que.description}
+                      -{que.description}
                     </h2>
                   </div>
                   <div>
                     <p className="p-3">
                       <span>Posted by- {que.userId?.name}</span> at{" "}
-                      {new Date(que.updatedAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
+                      {new Date(que.updatedAt).toLocaleString([], {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        
                       })}
                     </p>
                   </div>
@@ -97,11 +99,13 @@ const Feed = () => {
                       return (
                         <div className="bg-gray-700 rounded-xl p-4 m-4">
                           <h2 className="mb-3">{ans.answer}</h2>
-                          <p className="bg-gray-500 w-max rounded-3xl px-2">
-                            <span >Posted by- {ans.userId?.name}</span> at{" "}
-                            {new Date(ans.updatedAt).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
+                          <p className="bg-gray-500 max-w-max rounded-3xl px-2">
+                            <span>Posted by- {ans.userId?.name}</span> at{" "}
+                            {new Date(ans.updatedAt).toLocaleString([], {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                             
                             })}
                           </p>
                         </div>
@@ -145,5 +149,3 @@ const Feed = () => {
 };
 
 export default Feed;
-
-
