@@ -41,13 +41,13 @@
 ---
 ##  Screenshots
 
-- User registration
+### User registration
 ![Form](./Frontend/public/screenshots/Register.png)
-- User Login
+### User Login
 ![Login](./Frontend/public/screenshots/Login.png)
-- User personal dashboard
+### User personal dashboard
 ![Admin Dashboard](./Frontend/public/screenshots/PDash.png)
-- Common dashboard
+### Common dashboard
 ![Admin Dashboard](./Frontend/public/screenshots/feed.png)
 
 
